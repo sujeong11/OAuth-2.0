@@ -27,4 +27,7 @@ public class User {
     private String role;
     @CreationTimestamp
     private Timestamp createAt;
+
+    private String provider; // 구글
+    private String providerId; // userRequest로부터 getAttributes의 sub를 저장
 }
