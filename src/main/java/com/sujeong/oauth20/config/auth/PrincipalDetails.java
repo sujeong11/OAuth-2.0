@@ -1,6 +1,7 @@
 package com.sujeong.oauth20.config.auth;
 
 import com.sujeong.oauth20.model.User;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import java.util.Collection;
  * 시큐리티 Session => Authentication => UserDetails
  */
 @RequiredArgsConstructor
+@Getter
 public class PrincipalDetails implements UserDetails {
 
     private final User user;
