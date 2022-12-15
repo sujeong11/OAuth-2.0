@@ -1,5 +1,6 @@
-package com.sujeong.oauth20.config.auth;
+package com.sujeong.oauth20.config.oauth;
 
+import com.sujeong.oauth20.config.auth.PrincipalDetails;
 import com.sujeong.oauth20.model.User;
 import com.sujeong.oauth20.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 //        System.out.println("getAttributes" + super.loadUser(userRequest).getAttributes()); // 이 함수를 통해 회원 정보 확인 가능
         OAuth2User oauth2User = super.loadUser(userRequest);
 
-        String provider = userRequest.getClientRegistration().getClientId(); // 구글
+        String provider = userRequest.getClientRegistration().getRegistrationId(); // 구글, 페이스북
         String providerId = oauth2User.getAttribute("sub");
         String username = provider + "_" + providerId;
         String password = bCryptPasswordEncoder.encode("비밀번호");

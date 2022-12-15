@@ -1,6 +1,6 @@
 package com.sujeong.oauth20.config;
 
-import com.sujeong.oauth20.config.auth.PrincipalOauth2UserService;
+import com.sujeong.oauth20.config.oauth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
