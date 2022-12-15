@@ -32,4 +32,10 @@ public class OauthController {
         System.out.println("OAuth2User: " + oauth.getAttributes());
         return "Oauth 사용자 세션정보";
     }
+
+    @GetMapping("/test")
+    public String test(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("PrincipalDetails" + principalDetails.getUser());
+        return "한 타입으로 세션정보 확인";
+    }
 }

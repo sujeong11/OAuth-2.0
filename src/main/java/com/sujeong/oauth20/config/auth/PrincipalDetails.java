@@ -2,7 +2,6 @@ package com.sujeong.oauth20.config.auth;
 
 import com.sujeong.oauth20.model.User;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
