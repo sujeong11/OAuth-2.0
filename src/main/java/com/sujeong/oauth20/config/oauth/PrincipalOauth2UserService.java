@@ -1,6 +1,9 @@
 package com.sujeong.oauth20.config.oauth;
 
 import com.sujeong.oauth20.config.auth.PrincipalDetails;
+import com.sujeong.oauth20.config.oauth.provider.FacebookUserInfo;
+import com.sujeong.oauth20.config.oauth.provider.GoogleUserInfo;
+import com.sujeong.oauth20.config.oauth.provider.Oauth2UserInfo;
 import com.sujeong.oauth20.model.User;
 import com.sujeong.oauth20.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +33,23 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 //        System.out.println("getAccessToken" + userRequest.getAccessToken().getTokenValue());
 //        System.out.println("getAttributes" + super.loadUser(userRequest).getAttributes()); // 이 함수를 통해 회원 정보 확인 가능
         OAuth2User oauth2User = super.loadUser(userRequest);
+        Oauth2UserInfo oauth2UserInfo = null;
 
-        String provider = userRequest.getClientRegistration().getRegistrationId(); // 구글, 페이스북
-        String providerId = oauth2User.getAttribute("sub");
+        if (userRequest.getClientRegistration().getRegistrationId().equals("google")) {
+            System.out.println("구글 로그인 요청");
+            oauth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
+            System.out.println("페이스북 로그인 요청");
+            oauth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
+        } else {
+            System.out.println("저희 서비스는 구글, 페이스북 로그인만 지원합니다.");
+        }
+
+        String provider = oauth2UserInfo.getProvider();
+        String providerId = oauth2UserInfo.getProviderId();
         String username = provider + "_" + providerId;
         String password = bCryptPasswordEncoder.encode("비밀번호");
-        String email = oauth2User.getAttribute("email");
+        String email = oauth2UserInfo.getEmail();
         String role = "ROLE_USER";
 
         User userEntity = userRepository.findByUsername(username);
