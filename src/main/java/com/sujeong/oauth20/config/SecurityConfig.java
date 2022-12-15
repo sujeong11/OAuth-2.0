@@ -19,7 +19,7 @@ public class SecurityConfig {
     private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
-    public BCryptPasswordEncoder encoder() {
+    public static BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 
