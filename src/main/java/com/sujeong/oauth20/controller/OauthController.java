@@ -1,6 +1,10 @@
 package com.sujeong.oauth20.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sujeong.oauth20.config.auth.PrincipalDetails;
+import com.sujeong.oauth20.model.KakaoProfile;
+import com.sujeong.oauth20.model.OauthToken;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -74,6 +78,43 @@ public class OauthController {
                 kakaoTokenRequest,
                 String.class
         );
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        OauthToken oauthToken = null;
+        try {
+            oauthToken = objectMapper.readValue((String) response.getBody(), OauthToken.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        /**
+         * 사용자 정보 조회
+         */
+        RestTemplate rt2 = new RestTemplate();
+
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.add("Authorization", "Bearer " + oauthToken.getAccess_token());
+        headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers2);
+
+        ResponseEntity response2 = rt2.exchange(
+                "https://kapi.kakao.com/v2/user/me",
+                HttpMethod.POST,
+                kakaoProfileRequest,
+                String.class
+        );
+
+        ObjectMapper objectMapper2 = new ObjectMapper();
+        KakaoProfile kakaoProfile = null;
+        try {
+            kakaoProfile = objectMapper2.readValue((String)response2.getBody(), KakaoProfile.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+//        System.out.println("카카오 아이디" + kakaoProfile.getId());
+//        System.out.println("카카오 이메일" + kakaoProfile.getKakao_account().getEmail());
 
         return "카카오 인증 완료 후 응답 - " + response;
     }
